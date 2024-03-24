@@ -64,6 +64,15 @@ const EditProject: React.FC = () => {
         autoFocus
         value={title}
         onChange={(e) => setTitle(e.target.value)}
+        InputLabelProps={{
+          style: { color: 'white' },
+        }}
+        InputProps={{
+          style: { color: 'white', borderBottom: '1px solid white', borderTop: '1px solid white', borderLeft: '1px solid white', borderRight: '1px solid white'},
+        }}
+        inputProps={{
+          style: { color: 'white' },
+        }}
       />
         <TextField
             margin="normal"
@@ -78,6 +87,15 @@ const EditProject: React.FC = () => {
             rows={4}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            InputLabelProps={{
+              style: { color: 'white' },
+            }}
+            InputProps={{
+              style: { color: 'white', borderBottom: '1px solid white', borderTop: '1px solid white', borderLeft: '1px solid white', borderRight: '1px solid white'},
+            }}
+            inputProps={{
+              style: { color: 'white' },
+            }}
         />
         <TextField
             margin="normal"
@@ -90,6 +108,15 @@ const EditProject: React.FC = () => {
             autoComplete="current-status"
             value={status}
             onChange={(e) => setStatus(e.target.value)}
+            InputLabelProps={{
+              style: { color: 'white' },
+            }}
+            InputProps={{
+              style: { color: 'white', borderBottom: '1px solid white', borderTop: '1px solid white', borderLeft: '1px solid white', borderRight: '1px solid white'},
+            }}
+            inputProps={{
+              style: { color: 'white' },
+            }}
         />
         <TextField
             margin="normal"
@@ -102,6 +129,15 @@ const EditProject: React.FC = () => {
             autoComplete="current-technologies"
             value={technologies}
             onChange={(e) => setTechnologies(e.target.value)}
+            InputLabelProps={{
+              style: { color: 'white' },
+            }}
+            InputProps={{
+              style: { color: 'white', borderBottom: '1px solid white', borderTop: '1px solid white', borderLeft: '1px solid white', borderRight: '1px solid white'},
+            }}
+            inputProps={{
+              style: { color: 'white' },
+            }}
         />
         <TextField
             margin="normal"
@@ -114,6 +150,15 @@ const EditProject: React.FC = () => {
             autoComplete="current-startDate"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
+            InputLabelProps={{
+              style: { color: 'white' },
+            }}
+            InputProps={{
+              style: { color: 'white', borderBottom: '1px solid white', borderTop: '1px solid white', borderLeft: '1px solid white', borderRight: '1px solid white'},
+            }}
+            inputProps={{
+              style: { color: 'white' },
+            }}
         />
         <TextField
             margin="normal"
@@ -126,6 +171,15 @@ const EditProject: React.FC = () => {
             autoComplete="current-endDate"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
+            InputLabelProps={{
+              style: { color: 'white' },
+            }}
+            InputProps={{
+              style: { color: 'white', borderBottom: '1px solid white', borderTop: '1px solid white', borderLeft: '1px solid white', borderRight: '1px solid white'},
+            }}
+            inputProps={{
+              style: { color: 'white' },
+            }}
         />
         
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>

@@ -50,6 +50,15 @@ const AddProject: React.FC = () => {
         autoFocus
         value={title}
         onChange={(e) => setTitle(e.target.value)}
+        InputLabelProps={{
+          style: { color: 'white' },
+        }}
+        InputProps={{
+          style: { color: 'white', borderBottom: '1px solid white', borderTop: '1px solid white', borderLeft: '1px solid white', borderRight: '1px solid white'},
+        }}
+        inputProps={{
+          style: { color: 'white' },
+        }}
       />
       <TextField
         margin="normal"
@@ -64,6 +73,15 @@ const AddProject: React.FC = () => {
         rows={4}
         value={description}
         onChange={(e) => setDescription(e.target.value)}
+        InputLabelProps={{
+          style: { color: 'white' },
+        }}
+        InputProps={{
+          style: { color: 'white', borderBottom: '1px solid white', borderTop: '1px solid white', borderLeft: '1px solid white', borderRight: '1px solid white'},
+        }}
+        inputProps={{
+          style: { color: 'white' },
+        }}
       />
       <TextField
         select
@@ -72,6 +90,15 @@ const AddProject: React.FC = () => {
         onChange={(e) => setStatus(e.target.value)}
         fullWidth
         margin="normal"
+        InputLabelProps={{
+          style: { color: 'white' },
+        }}
+        InputProps={{
+          style: { color: 'white', borderBottom: '1px solid white', borderTop: '1px solid white', borderLeft: '1px solid white', borderRight: '1px solid white'},
+        }}
+        inputProps={{
+          style: { color: 'white' },
+        }}
       >
         <MenuItem value="Completed">Completed</MenuItem>
         <MenuItem value="In Progress">In Progress</MenuItem>
@@ -87,6 +114,15 @@ const AddProject: React.FC = () => {
         autoComplete="current-technologies"
         value={technologies}
         onChange={(e) => setTechnologies(e.target.value)}
+        InputLabelProps={{
+          style: { color: 'white' },
+        }}
+        InputProps={{
+          style: { color: 'white', borderBottom: '1px solid white', borderTop: '1px solid white', borderLeft: '1px solid white', borderRight: '1px solid white'},
+        }}
+        inputProps={{
+          style: { color: 'white' },
+        }}
       />
       <TextField
         margin="normal"
@@ -98,9 +134,16 @@ const AddProject: React.FC = () => {
         id="startDate"
         InputLabelProps={{
           shrink: true,
+          style: { color: 'white' },
         }}
         value={startDate}
         onChange={(e) => setStartDate(e.target.value)}
+        InputProps={{
+          style: { color: 'white', borderBottom: '1px solid white', borderTop: '1px solid white', borderLeft: '1px solid white', borderRight: '1px solid white'},
+        }}
+        inputProps={{
+          style: { color: 'white' },
+        }}
       />
       <TextField
         select
@@ -109,6 +152,15 @@ const AddProject: React.FC = () => {
         onChange={handleStatusChange}
         fullWidth
         margin="normal"
+        InputLabelProps={{
+          style: { color: 'white' },
+        }}
+        InputProps={{
+          style: { color: 'white', borderBottom: '1px solid white', borderTop: '1px solid white', borderLeft: '1px solid white', borderRight: '1px solid white'},
+        }}
+        inputProps={{
+          style: { color: 'white' },
+        }}
       >
         <MenuItem value="Completed">Completed</MenuItem>
         <MenuItem value="In Progress">In Progress</MenuItem>
@@ -121,10 +173,19 @@ const AddProject: React.FC = () => {
         label="End Date"
         type="date"
         id="endDate"
-        InputLabelProps={{ shrink: true }}
+        InputLabelProps={{ 
+          shrink: true,
+          style: { color: 'white' },
+        }}
         value={endDate}
         onChange={(e) => setEndDate(e.target.value)}
         disabled={status === 'In Progress'} 
+        InputProps={{
+          style: { color: 'white' },
+        }}
+        inputProps={{
+          style: { color: 'white', borderBottom: '1px solid white', borderTop: '1px solid white', borderLeft: '1px solid white', borderRight: '1px solid white'},
+        }}
       />
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
         Add Project
