@@ -29,7 +29,7 @@ const Home: React.FC = () => {
     };
 
     const handleClearSorting = () => {
-        setProjects([...initialProjects]); // Resets to the initial order
+        setProjects([...initialProjects]); // reset to initial
         setSortCriteria(''); // Optionally clear the sort criteria as well
         setSortDirection('asc'); // Reset to default direction if needed
     };
