@@ -64,7 +64,6 @@ const Home: React.FC = () => {
     return (
         <Fragment>
             <Box sx={{ padding: "2rem" }}>
-                {/* Sorting controls */}
                 <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between' }}>
                     <Button onClick={() => setSortCriteria('title')}>Sort by Title</Button>
                     <Button onClick={() => setSortCriteria('startDate')}>Sort by Start Date</Button>
@@ -136,7 +135,6 @@ const Home: React.FC = () => {
                     <ArrowForwardIosIcon />
                 </IconButton>
             </Box>
-
         </Fragment>
     );
 }
