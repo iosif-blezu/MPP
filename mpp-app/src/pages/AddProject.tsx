@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Box, MenuItem } from '@mui/material';
-import Project from '../type/Project';
-import initialProjects from '../components/Projects';
+import axios from 'axios';
+import Project from '../type/Project'; // Make sure this path is correctly imported
 
 const AddProject: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -16,8 +16,7 @@ const AddProject: React.FC = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const newProject: Project = {
-      id: initialProjects.length + 1, 
+    const newProject = {
       Title: title,
       Description: description,
       Status: status,
@@ -25,15 +24,20 @@ const AddProject: React.FC = () => {
       StartDate: startDate,
       EndDate: status === 'In Progress' ? 'TBD' : endDate,
     };
-    initialProjects.push(newProject);
-    navigate('/');
+
+    axios.post('http://localhost:5000/api/projects', newProject)
+      .then(response => {
+        // Navigate to the home page on successful creation
+        navigate('/');
+      })
+      .catch(error => console.error('Error adding new project', error));
   };
 
   const handleStatusChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newStatus = event.target.value;
     setStatus(newStatus);
     if (newStatus === 'In Progress') {
-      setEndDate(''); 
+      setEndDate(''); // Clear the end date if the project is in progress
     }
   };
 
@@ -50,15 +54,8 @@ const AddProject: React.FC = () => {
         autoFocus
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        InputLabelProps={{
-          style: { color: 'white' },
-        }}
-        InputProps={{
-          style: { color: 'white', borderBottom: '1px solid white', borderTop: '1px solid white', borderLeft: '1px solid white', borderRight: '1px solid white'},
-        }}
-        inputProps={{
-          style: { color: 'white' },
-        }}
+        InputLabelProps={{ style: { color: 'white' } }}
+        InputProps={{ style: { color: 'white' } }}
       />
       <TextField
         margin="normal"
@@ -68,37 +65,22 @@ const AddProject: React.FC = () => {
         label="Project Description"
         type="text"
         id="description"
-        autoComplete="current-description"
         multiline
         rows={4}
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        InputLabelProps={{
-          style: { color: 'white' },
-        }}
-        InputProps={{
-          style: { color: 'white', borderBottom: '1px solid white', borderTop: '1px solid white', borderLeft: '1px solid white', borderRight: '1px solid white'},
-        }}
-        inputProps={{
-          style: { color: 'white' },
-        }}
+        InputLabelProps={{ style: { color: 'white' } }}
+        InputProps={{ style: { color: 'white' } }}
       />
       <TextField
         select
         label="Project Status"
         value={status}
-        onChange={(e) => setStatus(e.target.value)}
+        onChange={handleStatusChange}
         fullWidth
         margin="normal"
-        InputLabelProps={{
-          style: { color: 'white' },
-        }}
-        InputProps={{
-          style: { color: 'white', borderBottom: '1px solid white', borderTop: '1px solid white', borderLeft: '1px solid white', borderRight: '1px solid white'},
-        }}
-        inputProps={{
-          style: { color: 'white' },
-        }}
+        InputLabelProps={{ style: { color: 'white' } }}
+        InputProps={{ style: { color: 'white' } }}
       >
         <MenuItem value="Completed">Completed</MenuItem>
         <MenuItem value="In Progress">In Progress</MenuItem>
@@ -111,18 +93,10 @@ const AddProject: React.FC = () => {
         label="Project Technologies (comma separated)"
         type="text"
         id="technologies"
-        autoComplete="current-technologies"
         value={technologies}
         onChange={(e) => setTechnologies(e.target.value)}
-        InputLabelProps={{
-          style: { color: 'white' },
-        }}
-        InputProps={{
-          style: { color: 'white', borderBottom: '1px solid white', borderTop: '1px solid white', borderLeft: '1px solid white', borderRight: '1px solid white'},
-        }}
-        inputProps={{
-          style: { color: 'white' },
-        }}
+        InputLabelProps={{ style: { color: 'white' } }}
+        InputProps={{ style: { color: 'white' } }}
       />
       <TextField
         margin="normal"
@@ -132,39 +106,11 @@ const AddProject: React.FC = () => {
         label="Start Date"
         type="date"
         id="startDate"
-        InputLabelProps={{
-          shrink: true,
-          style: { color: 'white' },
-        }}
         value={startDate}
         onChange={(e) => setStartDate(e.target.value)}
-        InputProps={{
-          style: { color: 'white', borderBottom: '1px solid white', borderTop: '1px solid white', borderLeft: '1px solid white', borderRight: '1px solid white'},
-        }}
-        inputProps={{
-          style: { color: 'white' },
-        }}
+        InputLabelProps={{ shrink: true, style: { color: 'white' } }}
+        InputProps={{ style: { color: 'white' } }}
       />
-      <TextField
-        select
-        label="Project Status"
-        value={status}
-        onChange={handleStatusChange}
-        fullWidth
-        margin="normal"
-        InputLabelProps={{
-          style: { color: 'white' },
-        }}
-        InputProps={{
-          style: { color: 'white', borderBottom: '1px solid white', borderTop: '1px solid white', borderLeft: '1px solid white', borderRight: '1px solid white'},
-        }}
-        inputProps={{
-          style: { color: 'white' },
-        }}
-      >
-        <MenuItem value="Completed">Completed</MenuItem>
-        <MenuItem value="In Progress">In Progress</MenuItem>
-      </TextField>
       <TextField
         margin="normal"
         required
@@ -173,19 +119,11 @@ const AddProject: React.FC = () => {
         label="End Date"
         type="date"
         id="endDate"
-        InputLabelProps={{ 
-          shrink: true,
-          style: { color: 'white' },
-        }}
+        disabled={status === 'In Progress'}
         value={endDate}
         onChange={(e) => setEndDate(e.target.value)}
-        disabled={status === 'In Progress'} 
-        InputProps={{
-          style: { color: 'white' },
-        }}
-        inputProps={{
-          style: { color: 'white', borderBottom: '1px solid white', borderTop: '1px solid white', borderLeft: '1px solid white', borderRight: '1px solid white'},
-        }}
+        InputLabelProps={{ shrink: true, style: { color: 'white' } }}
+        InputProps={{ style: { color: 'white' } }}
       />
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
         Add Project

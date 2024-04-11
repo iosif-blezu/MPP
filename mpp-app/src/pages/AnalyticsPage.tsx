@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import initialProjects from '../components/Projects';
-import Project from '../type/Project'; // Assuming this is where your Project type is defined
+import Project from '../type/Project'; // Make sure this path is correctly imported
 
 // Registering Chart.js components
 ChartJS.register(
@@ -14,14 +14,12 @@ ChartJS.register(
   Legend
 );
 
-// Typing the datasets for techData and yearData
 interface ChartDataset {
   label: string;
   data: number[];
   backgroundColor: string;
 }
 
-// Typing the state for the chart data
 interface ChartState {
   labels: string[];
   datasets: ChartDataset[];
@@ -32,39 +30,43 @@ const AnalyticsPage: React.FC = () => {
   const [yearData, setYearData] = useState<ChartState>({ labels: [], datasets: [] });
 
   useEffect(() => {
-    const techCounts: { [key: string]: number } = {};
-    const yearCounts: { [key: string]: number } = {};
+    // Fetch projects from backend
+    axios.get('http://localhost:5000/api/projects')
+      .then(response => {
+        const projects: Project[] = response.data;
+        const techCounts: { [key: string]: number } = {};
+        const yearCounts: { [key: string]: number } = {};
 
-    initialProjects.forEach((project: Project) => {
-      project.Technologies.forEach((tech: string) => {
-        techCounts[tech] = (techCounts[tech] || 0) + 1;
+        projects.forEach((project: Project) => {
+          project.Technologies.forEach((tech: string) => {
+            techCounts[tech] = (techCounts[tech] || 0) + 1;
+          });
+
+          const year = project.StartDate.split('-')[0];
+          yearCounts[year] = (yearCounts[year] || 0) + 1;
+        });
+
+        setTechData({
+          labels: Object.keys(techCounts),
+          datasets: [{
+            label: 'Number of Projects by Technology',
+            data: Object.values(techCounts),
+            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+          }],
+        });
+
+        setYearData({
+          labels: Object.keys(yearCounts).sort(),
+          datasets: [{
+            label: 'Number of Projects Started per Year',
+            data: Object.values(yearCounts),
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+          }],
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching project data', error);
       });
-
-      const year = project.StartDate.split('-')[0];
-      yearCounts[year] = (yearCounts[year] || 0) + 1;
-    });
-
-    setTechData({
-      labels: Object.keys(techCounts),
-      datasets: [
-        {
-          label: 'Number of Projects',
-          data: Object.values(techCounts),
-          backgroundColor: 'rgba(54, 162, 235, 0.5)',
-        },
-      ],
-    });
-
-    setYearData({
-      labels: Object.keys(yearCounts).sort(),
-      datasets: [
-        {
-          label: 'Number of Projects Started',
-          data: Object.values(yearCounts),
-          backgroundColor: 'rgba(255, 99, 132, 0.5)',
-        },
-      ],
-    });
   }, []);
 
   return (

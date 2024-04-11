@@ -1,39 +1,40 @@
 import React, { useState, Fragment, useEffect } from 'react';
 import { Button, Chip, Card, CardContent, CardActions, Typography, Grid, Box } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import initialProjects from '../components/Projects';
+import axios from 'axios';
 import Project from '../type/Project';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
-
-
 const Home: React.FC = () => {
-    const [projects, setProjects] = useState<Project[]>(initialProjects);
-    const [sortCriteria, setSortCriteria] = useState<string>('title'); // 'title', 'startDate', or 'endDate'
-    const [sortDirection, setSortDirection] = useState<string>('asc'); // 'asc' or 'desc'
+    const [projects, setProjects] = useState<Project[]>([]);
+    const [sortCriteria, setSortCriteria] = useState<string>('title');
+    const [sortDirection, setSortDirection] = useState<string>('asc');
     const [currentPage, setCurrentPage] = useState<number>(1);
     const itemsPerPage = 6;
-    const [totalPages, setTotalPages] = useState<number>(Math.ceil(projects.length / itemsPerPage));
+    const [totalPages, setTotalPages] = useState<number>(0);
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        setTotalPages(Math.ceil(projects.length / itemsPerPage));
-    }, [projects.length]);
-
+        axios.get('http://localhost:5000/api/projects')
+            .then(response => {
+                setProjects(response.data);
+                setTotalPages(Math.ceil(response.data.length / itemsPerPage));
+            })
+            .catch(error => console.error('Error fetching projects', error));
+    }, []);
 
     const handleDelete = (id: number) => {
-        setProjects(projects.filter(project => project.id !== id));
+        axios.delete(`http://localhost:5000/api/projects/${id}`)
+            .then(() => {
+                setProjects(prevProjects => prevProjects.filter(project => project.id !== id));
+                setTotalPages(prev => Math.ceil((projects.length - 1) / itemsPerPage));
+            })
+            .catch(error => console.error('Error deleting project', error));
     };
 
-    const handleClearSorting = () => {
-        setProjects([...initialProjects]); // reset to initial
-        setSortCriteria(''); // Optionally clear the sort criteria as well
-        setSortDirection('asc'); // Reset to default direction if needed
-    };
-    
     const sortedProjects = [...projects].sort((a, b) => {
         let valA: string | number = '';
         let valB: string | number = '';
@@ -60,7 +61,6 @@ const Home: React.FC = () => {
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentProjects = sortedProjects.slice(indexOfFirstItem, indexOfLastItem);
 
-
     return (
         <Fragment>
             <Box sx={{ padding: "2rem" }}>
@@ -71,7 +71,6 @@ const Home: React.FC = () => {
                     <Button onClick={() => setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc')}>
                         {sortDirection === 'asc' ? 'Ascending' : 'Descending'}
                     </Button>
-                    <Button onClick={handleClearSorting} color="primary">Clear Sorting</Button>
                 </Box>
                 <Grid container spacing={4}>
                     {currentProjects.map((project) => (
@@ -108,19 +107,19 @@ const Home: React.FC = () => {
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
                 <Link to="/add-project" style={{ textDecoration: 'none' }}>
-                    <Button sx={{ mx: 0.5 }} variant="contained" color="primary" >
+                    <Button sx={{ mx: 0.5 }} variant="contained" color="primary">
                         Add Project
                     </Button>
                 </Link>
                 <Link to="/analytics" style={{ textDecoration: 'none' }}>
-                    <Button sx={{ mx: 0.5 }} variant="contained" color="primary" >
+                    <Button sx={{ mx: 0.5 }} variant="contained" color="primary">
                         Analytics
                     </Button>
                 </Link>
             </Box>
             <Box sx={{ position: 'fixed', bottom: 20, right: 20, display: 'flex', alignItems: 'center' }}>
-                <IconButton 
-                    onClick={() => setCurrentPage(currentPage - 1)} 
+                <IconButton
+                    onClick={() => setCurrentPage(currentPage - 1)}
                     disabled={currentPage === 1}
                     color="primary">
                     <ArrowBackIosIcon />
@@ -128,8 +127,8 @@ const Home: React.FC = () => {
                 <Typography variant="body1" sx={{ mx: 1 }}>
                     Page {currentPage} of {totalPages}
                 </Typography>
-                <IconButton 
-                    onClick={() => setCurrentPage(currentPage + 1)} 
+                <IconButton
+                    onClick={() => setCurrentPage(currentPage + 1)}
                     disabled={currentPage === totalPages}
                     color="primary">
                     <ArrowForwardIosIcon />
