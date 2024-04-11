@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Box, MenuItem } from '@mui/material';
 import axios from 'axios';
-import Project from '../type/Project'; // Make sure this path is correctly imported
 
 const AddProject: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -26,7 +25,7 @@ const AddProject: React.FC = () => {
     };
 
     axios.post('http://localhost:5000/api/projects', newProject)
-      .then(response => {
+      .then(() => {
         // Navigate to the home page on successful creation
         navigate('/');
       })
