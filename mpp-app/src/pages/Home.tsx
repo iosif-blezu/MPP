@@ -1,6 +1,6 @@
 import React, { useState, Fragment, useEffect } from 'react';
 import { Button, Chip, Card, CardContent, CardActions, Typography, Grid, Box } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Project from '../type/Project';
 import IconButton from '@mui/material/IconButton';
@@ -14,6 +14,8 @@ const Home: React.FC = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const itemsPerPage = 6;
     const [totalPages, setTotalPages] = useState<number>(0);
+    const [error, setError] = useState<string | null>(null);
+
 
     const navigate = useNavigate();
 
@@ -22,10 +24,14 @@ const Home: React.FC = () => {
             .then(response => {
                 setProjects(response.data);
                 setTotalPages(Math.ceil(response.data.length / itemsPerPage));
+                setError(null); // Reset error on successful fetch
             })
-            .catch(error => console.error('Error fetching projects', error));
+            .catch(error => {
+                console.error('Error fetching projects', error);
+                setError('Failed to fetch projects. The backend may be unreachable.');
+            });
     }, []);
-
+    
     const handleDelete = (id: number) => {
         axios.delete(`http://localhost:5000/api/projects/${id}`)
             .then(() => {
@@ -64,18 +70,25 @@ const Home: React.FC = () => {
     return (
         <Fragment>
             <Box sx={{ padding: "2rem" }}>
-                <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between' }}>
-                    <Button onClick={() => setSortCriteria('title')}>Sort by Title</Button>
-                    <Button onClick={() => setSortCriteria('startDate')}>Sort by Start Date</Button>
-                    <Button onClick={() => setSortCriteria('endDate')}>Sort by End Date</Button>
-                    <Button onClick={() => setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc')}>
-                        {sortDirection === 'asc' ? 'Ascending' : 'Descending'}
-                    </Button>
-                </Box>
-                <Grid container spacing={4}>
-                    {currentProjects.map((project) => (
-                        <Grid item xs={12} sm={6} md={4} key={project.id}>
-                            <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor:'#FFFFFF' }}>
+                {error && (
+                    <Typography variant="h6" color="error" sx={{ mb: 2 }}>
+                        {error}
+                    </Typography>
+                )}
+                {!error && (
+                    <Fragment>
+                        <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between' }}>
+                            <Button onClick={() => setSortCriteria('title')}>Sort by Title</Button>
+                            <Button onClick={() => setSortCriteria('startDate')}>Sort by Start Date</Button>
+                            <Button onClick={() => setSortCriteria('endDate')}>Sort by End Date</Button>
+                            <Button onClick={() => setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc')}>
+                                {sortDirection === 'asc' ? 'Ascending' : 'Descending'}
+                            </Button>
+                        </Box>
+                        <Grid container spacing={4}>
+                            {currentProjects.map((project) => (
+                                <Grid item xs={12} sm={6} md={4} key={project.id}>
+                                    <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor:'#FFFFFF' }}>
                                 <CardContent sx={{ flexGrow: 1 }}>
                                     <Typography gutterBottom variant="h5" component="h2">
                                         {project.Title}
@@ -101,21 +114,11 @@ const Home: React.FC = () => {
                                     <Button size="small" onClick={() => navigate(`/edit/${project.id}`)}>Edit</Button>
                                 </CardActions>
                             </Card>
+                                </Grid>
+                            ))}
                         </Grid>
-                    ))}
-                </Grid>
-            </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
-                <Link to="/add-project" style={{ textDecoration: 'none' }}>
-                    <Button sx={{ mx: 0.5 }} variant="contained" color="primary">
-                        Add Project
-                    </Button>
-                </Link>
-                <Link to="/analytics" style={{ textDecoration: 'none' }}>
-                    <Button sx={{ mx: 0.5 }} variant="contained" color="primary">
-                        Analytics
-                    </Button>
-                </Link>
+                    </Fragment>
+                )}
             </Box>
             <Box sx={{ position: 'fixed', bottom: 20, right: 20, display: 'flex', alignItems: 'center' }}>
                 <IconButton
@@ -136,6 +139,7 @@ const Home: React.FC = () => {
             </Box>
         </Fragment>
     );
+    
 }
 
 export default Home;
