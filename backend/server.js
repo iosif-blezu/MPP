@@ -16,7 +16,7 @@ function generateProjects(num) {
             id: i,
             Title: faker.commerce.productName(),
             Description: faker.lorem.sentence(),
-            Status: faker.random.arrayElement(['Completed', 'In Progress', 'Not Started']),
+            Status: faker.random.arrayElement(['Completed', 'In Progress']),
             Technologies: [faker.random.word(), faker.random.word(), faker.random.word()],
             StartDate: faker.date.past().toISOString().slice(0, 10),
             EndDate: faker.date.future().toISOString().slice(0, 10)
@@ -25,7 +25,7 @@ function generateProjects(num) {
     return projects;
 }
 
-let projects = generateProjects(20);
+let projects = generateProjects(24);
 
 app.get('/api/projects', (req, res) => {
     res.status(200).send(projects);

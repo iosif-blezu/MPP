@@ -59,7 +59,7 @@ describe('API server', () => {
     });
 
     afterAll((done) => {
-        console.log('Gracefully stopping test server');
+        console.log('stopping test server');
         api.close(done);
     });
 
@@ -86,7 +86,7 @@ describe('API server', () => {
         };
         const response = await request(api).post('/api/projects').send(newProject);
         expect(response.statusCode).toBe(201);
-        expect(response.body.id).toBe(5); // Assumes this is the next ID
+        expect(response.body.id).toBe(5); 
     });
 
     it('responds to put /api/projects/:id with status 200', async () => {

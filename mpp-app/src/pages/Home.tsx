@@ -1,6 +1,6 @@
 import React, { useState, Fragment, useEffect } from 'react';
 import { Button, Chip, Card, CardContent, CardActions, Typography, Grid, Box } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Project from '../type/Project';
 import IconButton from '@mui/material/IconButton';
@@ -24,7 +24,7 @@ const Home: React.FC = () => {
             .then(response => {
                 setProjects(response.data);
                 setTotalPages(Math.ceil(response.data.length / itemsPerPage));
-                setError(null); // Reset error on successful fetch
+                setError(null);
             })
             .catch(error => {
                 console.error('Error fetching projects', error);
@@ -119,6 +119,18 @@ const Home: React.FC = () => {
                         </Grid>
                     </Fragment>
                 )}
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
+                <Link to="/add-project" style={{ textDecoration: 'none' }}>
+                    <Button sx={{ mx: 0.5 }} variant="contained" color="primary">
+                        Add Project
+                    </Button>
+                </Link>
+                <Link to="/analytics" style={{ textDecoration: 'none' }}>
+                    <Button sx={{ mx: 0.5 }} variant="contained" color="primary">
+                        Analytics
+                    </Button>
+                </Link>
             </Box>
             <Box sx={{ position: 'fixed', bottom: 20, right: 20, display: 'flex', alignItems: 'center' }}>
                 <IconButton
