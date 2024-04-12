@@ -9,7 +9,6 @@ const PORT = 5000;
 app.use(cors());
 app.use(bodyParser.json());
 
-// Function to generate random projects
 function generateProjects(num) {
     let projects = [];
     for (let i = 1; i <= num; i++) {
@@ -26,7 +25,7 @@ function generateProjects(num) {
     return projects;
 }
 
-let projects = generateProjects(20);  // Generate 10 random projects
+let projects = generateProjects(20);
 
 app.get('/api/projects', (req, res) => {
     res.status(200).send(projects);

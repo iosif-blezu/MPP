@@ -9,16 +9,13 @@ jest.mock('react-router-dom', () => ({
 }));
 
 describe('AddProject Component', () => {
-  // Backup the original projects array
   let backupProjects:any[] = [];
 
   beforeEach(() => {
-    // Create a deep copy of the projects to restore after each test
     backupProjects = [...initialProjects.map(project => ({ ...project }))];
   });
 
   afterEach(() => {
-    // Restore the original projects array to prevent test leakage
     initialProjects.length = 0;
     initialProjects.push(...backupProjects);
   });

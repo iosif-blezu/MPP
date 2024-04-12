@@ -26,7 +26,6 @@ const AddProject: React.FC = () => {
 
     axios.post('http://localhost:5000/api/projects', newProject)
       .then(() => {
-        // Navigate to the home page on successful creation
         navigate('/');
       })
       .catch(error => console.error('Error adding new project', error));
@@ -36,7 +35,7 @@ const AddProject: React.FC = () => {
     const newStatus = event.target.value;
     setStatus(newStatus);
     if (newStatus === 'In Progress') {
-      setEndDate(''); // Clear the end date if the project is in progress
+      setEndDate(''); 
     }
   };
 

@@ -4,7 +4,6 @@ import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import Project from '../type/Project'; // Make sure this path is correctly imported
 
-// Registering Chart.js components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -30,7 +29,6 @@ const AnalyticsPage: React.FC = () => {
   const [yearData, setYearData] = useState<ChartState>({ labels: [], datasets: [] });
 
   useEffect(() => {
-    // Fetch projects from backend
     axios.get('http://localhost:5000/api/projects')
       .then(response => {
         const projects: Project[] = response.data;

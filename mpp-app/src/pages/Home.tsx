@@ -30,7 +30,7 @@ const Home: React.FC = () => {
         axios.delete(`http://localhost:5000/api/projects/${id}`)
             .then(() => {
                 setProjects(prevProjects => prevProjects.filter(project => project.id !== id));
-                setTotalPages(prev => Math.ceil((projects.length - 1) / itemsPerPage));
+                setTotalPages(() => Math.ceil((projects.length - 1) / itemsPerPage));
             })
             .catch(error => console.error('Error deleting project', error));
     };
