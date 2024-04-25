@@ -1,5 +1,5 @@
 interface Project {
-    id: number;
+    _id: string; // Adjust this from 'id: number' to '_id: string'
     Title: string;
     Description: string;
     Status: string;

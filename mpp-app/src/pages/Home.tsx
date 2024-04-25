@@ -32,14 +32,15 @@ const Home: React.FC = () => {
             });
     }, []);
     
-    const handleDelete = (id: number) => {
-        axios.delete(`http://localhost:5000/api/projects/${id}`)
+    const handleDelete = (_id: string) => {
+        axios.delete(`http://localhost:5000/api/projects/${_id}`)
             .then(() => {
-                setProjects(prevProjects => prevProjects.filter(project => project.id !== id));
+                setProjects(prevProjects => prevProjects.filter(project => project._id !== _id));
                 setTotalPages(() => Math.ceil((projects.length - 1) / itemsPerPage));
             })
             .catch(error => console.error('Error deleting project', error));
     };
+    
 
     const sortedProjects = [...projects].sort((a, b) => {
         let valA: string | number = '';
@@ -86,9 +87,9 @@ const Home: React.FC = () => {
                             </Button>
                         </Box>
                         <Grid container spacing={4}>
-                            {currentProjects.map((project) => (
-                                <Grid item xs={12} sm={6} md={4} key={project.id}>
-                                    <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor:'#FFFFFF' }}>
+                        {currentProjects.map((project) => (
+                        <Grid item xs={12} sm={6} md={4} key={project._id}>
+                            <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor:'#FFFFFF' }}>
                                 <CardContent sx={{ flexGrow: 1 }}>
                                     <Typography gutterBottom variant="h5" component="h2">
                                         {project.Title}
@@ -99,8 +100,8 @@ const Home: React.FC = () => {
                                     <Typography variant="body2" color="textSecondary">
                                         Status: {project.Status}
                                     </Typography>
-                                    {project.Technologies.map((tech) => (
-                                        <Chip key={tech} label={tech} sx={{ margin: "0.1rem" }} />
+                                    {project.Technologies.map((tech, index) => (
+                                        <Chip key={index} label={tech} sx={{ margin: "0.1rem" }} />
                                     ))}
                                     <Typography variant="body2" color="textSecondary">
                                         Start Date: {project.StartDate}
@@ -110,12 +111,12 @@ const Home: React.FC = () => {
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
-                                    <Button size="small" onClick={() => handleDelete(project.id)}>Delete</Button>
-                                    <Button size="small" onClick={() => navigate(`/edit/${project.id}`)}>Edit</Button>
+                                    <Button size="small" onClick={() => handleDelete(project._id)}>Delete</Button>
+                                    <Button size="small" onClick={() => navigate(`/edit/${project._id}`)}>Edit</Button>
                                 </CardActions>
                             </Card>
-                                </Grid>
-                            ))}
+                        </Grid>
+                    ))}
                         </Grid>
                     </Fragment>
                 )}

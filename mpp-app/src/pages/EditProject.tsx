@@ -43,9 +43,11 @@ const EditProject: React.FC = () => {
       StartDate: startDate,
       EndDate: status === 'In Progress' ? 'TBD' : endDate,
     };
+    console.log('handleSubmit called'); // Add this line
 
-    if (project && project.id) {
-      axios.put(`http://localhost:5000/api/projects/${project.id}`, updatedProject)
+
+    if (project && projectId) {
+      axios.put(`http://localhost:5000/api/projects/${projectId}`, updatedProject)
         .then(() => navigate('/'))
         .catch(error => console.error('Error updating project', error));
     }
