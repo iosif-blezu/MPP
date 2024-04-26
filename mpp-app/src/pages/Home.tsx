@@ -109,6 +109,11 @@ const Home: React.FC = () => {
                                     <Typography variant="body2" color="textSecondary">
                                         End Date: {project.EndDate}
                                     </Typography>
+                                    <Typography variant="body2" sx={{ mt: 2 }}>
+                                    <Link to={`/tasks/${project._id}`} style={{ textDecoration: 'none' }}>
+                                        Tasks
+                                    </Link>
+                                    </Typography>
                                 </CardContent>
                                 <CardActions>
                                     <Button size="small" onClick={() => handleDelete(project._id)}>Delete</Button>

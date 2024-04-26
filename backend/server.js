@@ -88,21 +88,24 @@ app.get('/api/tasks', async (req, res) => {
         res.status(500).json({ error: error.toString() });
     }
 });
-
-// POST a new task
 app.post('/api/tasks', async (req, res) => {
     try {
-        const result = await taskCollection.insertOne(req.body);
-        res.status(201).json(result);
+      const task = {
+        ...req.body,
+        projectId: new ObjectId(req.body.projectId), // Convert projectId to ObjectId
+      };
+      const result = await taskCollection.insertOne(task);
+      res.status(201).json(result);
     } catch (error) {
-        res.status(400).json({ error: error.toString() });
+      res.status(400).json({ error: error.toString() });
     }
-});
+  });
+  
 
 // GET a specific task by ID
 app.get('/api/tasks/:id', async (req, res) => {
     try {
-        const task = await taskCollection.findOne({ _id: new ObjectID(req.params.id) });
+        const task = await taskCollection.findOne({ _id: new ObjectId(req.params.id) });
         if (!task) {
             return res.status(404).json({ error: 'Task not found' });
         }
@@ -115,23 +118,24 @@ app.get('/api/tasks/:id', async (req, res) => {
 // PUT to update a task by ID
 app.put('/api/tasks/:id', async (req, res) => {
     try {
-        const result = await taskCollection.updateOne(
-            { _id: new ObjectID(req.params.id) },
-            { $set: req.body }
-        );
-        if (result.modifiedCount === 0) {
-            return res.status(404).json({ error: 'No task found with that ID or no changes provided' });
-        }
-        res.status(200).json(result);
+      const taskId = new ObjectId(req.params.id);
+      const updatedTask = {
+        ...req.body,
+        projectId: new ObjectId(req.body.projectId),
+      };
+  
+      const result = await taskCollection.updateOne({ _id: taskId }, { $set: updatedTask });
+      res.status(200).json(result);
     } catch (error) {
-        res.status(400).json({ error: error.toString() });
+      res.status(400).json({ error: error.toString() });
     }
-});
+  });
+  
 
 // DELETE a task by ID
 app.delete('/api/tasks/:id', async (req, res) => {
     try {
-        const result = await taskCollection.deleteOne({ _id: new ObjectID(req.params.id) });
+        const result = await taskCollection.deleteOne({ _id: new ObjectId(req.params.id) });
         if (result.deletedCount === 0) {
             return res.status(404).json({ error: 'No task found with that ID' });
         }
