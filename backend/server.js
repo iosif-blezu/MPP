@@ -25,36 +25,43 @@ const jwt = require('jsonwebtoken');
 
 const userCollection = client.db('mpp2').collection('users');
 
+// server.js
 app.post('/api/signup', async (req, res) => {
     const { username, password } = req.body;
     try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const result = await userCollection.insertOne({ username, password: hashedPassword });
-        res.status(201).json(result);
+      const existingUser = await userCollection.findOne({ username });
+      if (existingUser) {
+        return res.status(409).json({ error: 'Username already exists' }); // Conflict status code
+      }
+  
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const result = await userCollection.insertOne({ username, password: hashedPassword });
+      res.status(201).json(result);
     } catch (error) {
-        res.status(400).json({ error: error.toString() });
+      res.status(400).json({ error: error.toString() });
     }
-});
-
-app.post('/api/login', async (req, res) => {
+  });
+  
+  app.post('/api/login', async (req, res) => {
     const { username, password } = req.body;
     try {
-        const user = await userCollection.findOne({ username });
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
-            return res.status(401).json({ error: 'Invalid password' });
-        }
-
-        const token = jwt.sign({ userId: user._id }, 'secret_key', { expiresIn: '1h' });
-        res.status(200).json({ token });
+      const user = await userCollection.findOne({ username });
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+        return res.status(401).json({ error: 'Invalid password' });
+      }
+  
+      const token = jwt.sign({ userId: user._id }, 'secret_key', { expiresIn: '1h' });
+      res.status(200).json({ token });
     } catch (error) {
-        res.status(500).json({ error: error.toString() });
+      res.status(500).json({ error: error.toString() });
     }
-});
+  });
+  
 
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];

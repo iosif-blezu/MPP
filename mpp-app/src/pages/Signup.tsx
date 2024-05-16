@@ -1,7 +1,8 @@
 // src/pages/Signup.tsx
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useNavigate, Link } from 'react-router-dom';
+import axios from '../axiosConfig'; // Use the configured Axios instance
+import { TextField, Button, Box, Typography, Container, Grid } from '@mui/material';
 
 const Signup: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -14,38 +15,80 @@ const Signup: React.FC = () => {
     setError(null);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/signup', { username, password });
+      const response = await axios.post('/signup', { username, password });
       console.log('User signed up', response.data);
       navigate('/login'); // Redirect to login page after successful signup
     } catch (error: any) {
       console.error('Error signing up', error);
-      setError('Signup failed. Please try again.');
+      if (error.response && error.response.status === 409) {
+        setError('Username already exists');
+      } else {
+        setError('Signup failed. Please try again.');
+      }
     }
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Username:</label>
-          <input
-            type="text"
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Typography component="h1" variant="h5">
+          Sign Up
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="username"
+            label="Username"
+            name="username"
+            autoComplete="username"
+            autoFocus
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
             type="password"
+            id="password"
+            autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-        </div>
-        <button type="submit">Signup</button>
-      </form>
-      {error && <p>{error}</p>}
-    </div>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Sign Up
+          </Button>
+          {error && (
+            <Typography variant="body2" color="error">
+              {error}
+            </Typography>
+          )}
+          <Grid container justifyContent="center">
+            <Grid item>
+              <Link to="/login">
+                <Button variant="text">Already a user? Login</Button>
+              </Link>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+    </Container>
   );
 };
 
