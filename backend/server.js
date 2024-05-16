@@ -10,13 +10,13 @@ const PORT = 5000;
 app.use(cors());
 app.use(bodyParser.json());
 
-// Connect to MongoDB
 const uri = "mongodb+srv://iosif:parola@test.ootr9ct.mongodb.net/?retryWrites=true&w=majority&appName=Test";
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
-    deprecationErrors: true
+    deprecationErrors: true,
   }
 });
 
@@ -78,7 +78,6 @@ app.delete('/api/projects/:id', async (req, res) => {
     }
 });
 
-// Task CRUD operations similarly as done for projects
 
 app.get('/api/tasks', async (req, res) => {
     try {
@@ -92,7 +91,7 @@ app.post('/api/tasks', async (req, res) => {
     try {
       const task = {
         ...req.body,
-        projectId: new ObjectId(req.body.projectId), // Convert projectId to ObjectId
+        projectId: new ObjectId(req.body.projectId), 
       };
       const result = await taskCollection.insertOne(task);
       res.status(201).json(result);
@@ -102,7 +101,6 @@ app.post('/api/tasks', async (req, res) => {
   });
   
 
-// GET a specific task by ID
 app.get('/api/tasks/:id', async (req, res) => {
     try {
         const task = await taskCollection.findOne({ _id: new ObjectId(req.params.id) });
@@ -115,7 +113,6 @@ app.get('/api/tasks/:id', async (req, res) => {
     }
 });
 
-// PUT to update a task by ID
 app.put('/api/tasks/:id', async (req, res) => {
     try {
       const taskId = new ObjectId(req.params.id);
@@ -132,7 +129,6 @@ app.put('/api/tasks/:id', async (req, res) => {
   });
   
 
-// DELETE a task by ID
 app.delete('/api/tasks/:id', async (req, res) => {
     try {
         const result = await taskCollection.deleteOne({ _id: new ObjectId(req.params.id) });
@@ -176,8 +172,10 @@ app.listen(PORT, async () => {
     try {
         await client.connect();
         console.log("MongoDB connected and server running on http://localhost:" + PORT);
-        await createInitialData();  // Initialize sample data
+        await createInitialData();  
     } catch (err) {
         console.error("Failed to connect to MongoDB", err);
     }
 });
+
+module.exports = app;
