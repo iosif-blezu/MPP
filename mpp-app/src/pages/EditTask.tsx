@@ -1,7 +1,8 @@
+// src/pages/EditTask.tsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { TextField, Button, Box, MenuItem } from '@mui/material';
-import axios from 'axios';
+import axios from '../axiosConfig'; // Use the configured Axios instance
 
 interface Task {
   _id: string;
@@ -24,7 +25,7 @@ const EditTask: React.FC = () => {
   useEffect(() => {
     const fetchTask = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/tasks/${taskId}`);
+        const response = await axios.get(`/tasks/${taskId}`);
         setTask(response.data);
         setName(response.data.name);
         setDescription(response.data.description);
@@ -51,9 +52,9 @@ const EditTask: React.FC = () => {
     };
 
     try {
-      await axios.put(`http://localhost:5000/api/tasks/${task._id}`, updatedTask);
+      await axios.put(`/tasks/${task._id}`, updatedTask);
       console.log('Task updated:', updatedTask);
-      navigate('/');
+      navigate(`/tasks/${projectId}`);
     } catch (error) {
       console.error('Error updating task', error);
     }

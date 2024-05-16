@@ -1,7 +1,8 @@
+// src/pages/EditProject.tsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { TextField, Button, Box } from '@mui/material';
-import axios from 'axios';
+import axios from '../axiosConfig'; // Use the configured Axios instance
 import Project from '../type/Project'; // Adjust the import path as necessary
 
 const EditProject: React.FC = () => {
@@ -18,7 +19,7 @@ const EditProject: React.FC = () => {
 
   useEffect(() => {
     if (projectId) {
-      axios.get(`http://localhost:5000/api/projects/${projectId}`)
+      axios.get(`/projects/${projectId}`)
         .then(response => {
           const proj = response.data;
           setProject(proj);
@@ -43,11 +44,9 @@ const EditProject: React.FC = () => {
       StartDate: startDate,
       EndDate: status === 'In Progress' ? 'TBD' : endDate,
     };
-    console.log('handleSubmit called'); // Add this line
-
 
     if (project && projectId) {
-      axios.put(`http://localhost:5000/api/projects/${projectId}`, updatedProject)
+      axios.put(`/projects/${projectId}`, updatedProject)
         .then(() => navigate('/'))
         .catch(error => console.error('Error updating project', error));
     }

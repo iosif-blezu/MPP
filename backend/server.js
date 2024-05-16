@@ -20,11 +20,59 @@ const client = new MongoClient(uri, {
   }
 });
 
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+const userCollection = client.db('mpp2').collection('users');
+
+app.post('/api/signup', async (req, res) => {
+    const { username, password } = req.body;
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const result = await userCollection.insertOne({ username, password: hashedPassword });
+        res.status(201).json(result);
+    } catch (error) {
+        res.status(400).json({ error: error.toString() });
+    }
+});
+
+app.post('/api/login', async (req, res) => {
+    const { username, password } = req.body;
+    try {
+        const user = await userCollection.findOne({ username });
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(401).json({ error: 'Invalid password' });
+        }
+
+        const token = jwt.sign({ userId: user._id }, 'secret_key', { expiresIn: '1h' });
+        res.status(200).json({ token });
+    } catch (error) {
+        res.status(500).json({ error: error.toString() });
+    }
+});
+
+const authenticateToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    if (!token) return res.sendStatus(401);
+
+    jwt.verify(token, 'secret_key', (err, user) => {
+        if (err) return res.sendStatus(403);
+        req.user = user;
+        next();
+    });
+};
+
 const projectCollection = client.db('mpp2').collection('projects');
 const taskCollection = client.db('mpp2').collection('tasks');
 
 
-app.get('/api/projects', async (req, res) => {
+app.get('/api/projects', authenticateToken, async (req, res) => {
     try {
         const projects = await projectCollection.find({}).toArray();
         res.json(projects);
@@ -34,7 +82,7 @@ app.get('/api/projects', async (req, res) => {
     }
 });
 
-app.post('/api/projects', async (req, res) => {
+app.post('/api/projects', authenticateToken, async (req, res) => {
     try {
         const result = await projectCollection.insertOne(req.body);
         res.status(201).json(result);
@@ -43,7 +91,7 @@ app.post('/api/projects', async (req, res) => {
     }
 });
 
-app.get('/api/projects/:id', async (req, res) => {
+app.get('/api/projects/:id', authenticateToken, async (req, res) => {
     try {
         const project = await projectCollection.findOne({ _id: new ObjectId(req.params.id)});
         if (!project) {
@@ -56,7 +104,7 @@ app.get('/api/projects/:id', async (req, res) => {
     }
 });
 
-app.put('/api/projects/:id', async (req, res) => {
+app.put('/api/projects/:id', authenticateToken, async (req, res) => {
     try {
         const result = await projectCollection.updateOne(
             { _id: new ObjectId(req.params.id) },
@@ -68,7 +116,7 @@ app.put('/api/projects/:id', async (req, res) => {
     }
 });
 
-app.delete('/api/projects/:id', async (req, res) => {
+app.delete('/api/projects/:id', authenticateToken, async (req, res) => {
     try {
         await taskCollection.deleteMany({ _id: new  ObjectId(req.params.id) });
         const result = await projectCollection.deleteOne({ _id: new ObjectId(req.params.id) });
@@ -79,7 +127,7 @@ app.delete('/api/projects/:id', async (req, res) => {
 });
 
 
-app.get('/api/tasks', async (req, res) => {
+app.get('/api/tasks',  authenticateToken, async (req, res) => {
     try {
         const tasks = await taskCollection.find().toArray();
         res.status(200).json(tasks);
@@ -87,7 +135,7 @@ app.get('/api/tasks', async (req, res) => {
         res.status(500).json({ error: error.toString() });
     }
 });
-app.post('/api/tasks', async (req, res) => {
+app.post('/api/tasks', authenticateToken, async (req, res) => {
     try {
       const task = {
         ...req.body,
@@ -101,7 +149,7 @@ app.post('/api/tasks', async (req, res) => {
   });
   
 
-app.get('/api/tasks/:id', async (req, res) => {
+app.get('/api/tasks/:id', authenticateToken, async (req, res) => {
     try {
         const task = await taskCollection.findOne({ _id: new ObjectId(req.params.id) });
         if (!task) {
@@ -113,7 +161,7 @@ app.get('/api/tasks/:id', async (req, res) => {
     }
 });
 
-app.put('/api/tasks/:id', async (req, res) => {
+app.put('/api/tasks/:id', authenticateToken, async (req, res) => {
     try {
       const taskId = new ObjectId(req.params.id);
       const updatedTask = {
@@ -129,7 +177,7 @@ app.put('/api/tasks/:id', async (req, res) => {
   });
   
 
-app.delete('/api/tasks/:id', async (req, res) => {
+app.delete('/api/tasks/:id', authenticateToken, async (req, res) => {
     try {
         const result = await taskCollection.deleteOne({ _id: new ObjectId(req.params.id) });
         if (result.deletedCount === 0) {

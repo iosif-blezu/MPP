@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Box, MenuItem } from '@mui/material';
-import axios from 'axios';
+import axios from '../axiosConfig'; // Use the configured Axios instance
 
 const AddProject: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -24,7 +24,7 @@ const AddProject: React.FC = () => {
       EndDate: status === 'In Progress' ? 'TBD' : endDate,
     };
 
-    axios.post('http://localhost:5000/api/projects', newProject)
+    axios.post('/projects', newProject)
       .then(() => {
         navigate('/');
       })

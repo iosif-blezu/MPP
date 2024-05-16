@@ -1,7 +1,7 @@
-// TaskPage.tsx
+// src/pages/TaskPage.tsx
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../axiosConfig'; // Use the configured Axios instance
 import Task from '../type/Task'; // Adjust the import path as necessary
 import {
   Button,
@@ -20,7 +20,7 @@ const TaskPage: React.FC = () => {
 
   useEffect(() => {
     if (projectId) {
-      axios.get(`http://localhost:5000/api/projects/${projectId}`)
+      axios.get(`/projects/${projectId}`)
         .then(response => {
           const { tasks } = response.data; // Extract project and tasks from the response
           setTasks(tasks);
@@ -32,7 +32,7 @@ const TaskPage: React.FC = () => {
   }, [projectId]);
   
   const handleDelete = (taskId: string) => {
-    axios.delete(`http://localhost:5000/api/tasks/${taskId}`)
+    axios.delete(`/tasks/${taskId}`)
       .then(() => {
         setTasks(prevTasks => prevTasks.filter(task => task._id !== taskId));
       })
@@ -72,4 +72,5 @@ const TaskPage: React.FC = () => {
     </Box>
   );
 };  
+
 export default TaskPage;

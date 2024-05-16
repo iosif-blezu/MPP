@@ -1,5 +1,6 @@
+// src/pages/AnalyticsPage.tsx
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../axiosConfig'; // Use the configured Axios instance
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import Project from '../type/Project'; // Make sure this path is correctly imported
@@ -29,7 +30,7 @@ const AnalyticsPage: React.FC = () => {
   const [yearData, setYearData] = useState<ChartState>({ labels: [], datasets: [] });
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/projects')
+    axios.get('/projects')
       .then(response => {
         const projects: Project[] = response.data;
         const techCounts: { [key: string]: number } = {};

@@ -1,8 +1,8 @@
-// AddTask.tsx
+// src/pages/AddTask.tsx
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { TextField, Button, Box, MenuItem } from '@mui/material';
-import axios from 'axios';
+import axios from '../axiosConfig'; // Use the configured Axios instance
 
 const AddTask: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -21,8 +21,7 @@ const AddTask: React.FC = () => {
       status,
     };
 
-    
-    axios.post('http://localhost:5000/api/tasks', newTask)
+    axios.post('/tasks', newTask)
       .then(() => {
         navigate(`/tasks/${projectId}`); // Navigate to the tasks of that project
       })
