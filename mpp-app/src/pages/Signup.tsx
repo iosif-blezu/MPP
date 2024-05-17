@@ -1,4 +1,3 @@
-// src/pages/Signup.tsx
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from '../axiosConfig'; 

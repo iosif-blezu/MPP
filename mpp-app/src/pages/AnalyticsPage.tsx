@@ -1,4 +1,3 @@
-// src/pages/AnalyticsPage.tsx
 import React, { useEffect, useState } from 'react';
 import axios from '../axiosConfig'; 
 import { Bar } from 'react-chartjs-2';

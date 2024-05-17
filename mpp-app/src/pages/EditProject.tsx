@@ -1,4 +1,3 @@
-// src/pages/EditProject.tsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { TextField, Button, Box } from '@mui/material';
