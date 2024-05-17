@@ -1,8 +1,8 @@
 // src/pages/TaskPage.tsx
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from '../axiosConfig'; // Use the configured Axios instance
-import Task from '../type/Task'; // Adjust the import path as necessary
+import axios from '../axiosConfig';
+import Task from '../type/Task'; 
 import {
   Button,
   Card,
@@ -22,7 +22,7 @@ const TaskPage: React.FC = () => {
     if (projectId) {
       axios.get(`/projects/${projectId}`)
         .then(response => {
-          const { tasks } = response.data; // Extract project and tasks from the response
+          const { tasks } = response.data;
           setTasks(tasks);
         })
         .catch(error => {

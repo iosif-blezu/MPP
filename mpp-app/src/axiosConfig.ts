@@ -2,10 +2,9 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: 'http://86.125.70.138:45871/api',
 });
 
-// Add a request interceptor
 instance.interceptors.request.use(
   config => {
     const token = localStorage.getItem('token');

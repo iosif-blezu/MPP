@@ -1,9 +1,9 @@
 // src/pages/AnalyticsPage.tsx
 import React, { useEffect, useState } from 'react';
-import axios from '../axiosConfig'; // Use the configured Axios instance
+import axios from '../axiosConfig'; 
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import Project from '../type/Project'; // Make sure this path is correctly imported
+import Project from '../type/Project'; 
 
 ChartJS.register(
   CategoryScale,

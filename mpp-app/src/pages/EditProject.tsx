@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { TextField, Button, Box } from '@mui/material';
-import axios from '../axiosConfig'; // Use the configured Axios instance
-import Project from '../type/Project'; // Adjust the import path as necessary
+import axios from '../axiosConfig'; 
+import Project from '../type/Project'; 
 
 const EditProject: React.FC = () => {
   const navigate = useNavigate();

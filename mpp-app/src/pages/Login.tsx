@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { TextField, Button, Box, Typography, Container, Grid } from '@mui/material';
-import { login } from '../components/auth'; // Ensure this is the correct path to your auth module
+import { login } from '../components/auth'; 
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -16,9 +16,9 @@ const Login: React.FC = () => {
 
     try {
       const response = await login(username, password);
-      localStorage.setItem('token', response.data.token); // Save the token in localStorage
+      localStorage.setItem('token', response.data.token); 
       console.log('User logged in', response.data);
-      navigate('/'); // Redirect to home page after successful login
+      navigate('/home'); 
     } catch (error: any) {
       console.error('Error logging in', error);
       if (error.response && error.response.status === 401) {
