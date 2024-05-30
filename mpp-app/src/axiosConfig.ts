@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: 'https://mpp-2m2u.onrender.com/api',
 });
 
 // Add a request interceptor

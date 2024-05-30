@@ -16,10 +16,10 @@ const App: React.FC = () => {
     <div className="App">
       <Router>
         <Routes>
-          <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route element={<ProtectedRoute />}> {/* Wrap protected routes inside the ProtectedRoute */}
+            <Route path="/" element={<Home />} />
             <Route path="/tasks/:projectId" element={<TaskPage />} />
             <Route path="/add-task/:projectId" element={<AddTask />} />
             <Route path="/edit-task/:taskId" element={<EditTask />} />
