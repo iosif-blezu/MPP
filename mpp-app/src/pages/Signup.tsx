@@ -1,6 +1,7 @@
+// src/pages/Signup.tsx
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from '../axiosConfig'; 
+import axios from '../axiosConfig'; // Use the configured Axios instance
 import { TextField, Button, Box, Typography, Container, Grid } from '@mui/material';
 
 const Signup: React.FC = () => {
@@ -16,7 +17,7 @@ const Signup: React.FC = () => {
     try {
       const response = await axios.post('/signup', { username, password });
       console.log('User signed up', response.data);
-      navigate('/login'); 
+      navigate('/login'); // Redirect to login page after successful signup
     } catch (error: any) {
       console.error('Error signing up', error);
       if (error.response && error.response.status === 409) {

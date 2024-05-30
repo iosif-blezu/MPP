@@ -25,12 +25,13 @@ const jwt = require('jsonwebtoken');
 
 const userCollection = client.db('mpp2').collection('users');
 
+// server.js
 app.post('/api/signup', async (req, res) => {
     const { username, password } = req.body;
     try {
       const existingUser = await userCollection.findOne({ username });
       if (existingUser) {
-        return res.status(409).json({ error: 'Username already exists' }); 
+        return res.status(409).json({ error: 'Username already exists' }); // Conflict status code
       }
   
       const hashedPassword = await bcrypt.hash(password, 10);

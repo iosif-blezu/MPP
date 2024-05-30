@@ -1,7 +1,7 @@
 import React, { useState, Fragment, useEffect } from 'react';
 import { Button, Chip, Card, CardContent, CardActions, Typography, Grid, Box } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from '../axiosConfig'; 
+import axios from '../axiosConfig'; // Import the configured Axios instance
 import Project from '../type/Project';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';

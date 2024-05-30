@@ -1,7 +1,8 @@
+// src/pages/Login.tsx
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { TextField, Button, Box, Typography, Container, Grid } from '@mui/material';
-import { login } from '../components/auth'; 
+import { login } from '../components/auth'; // Ensure this is the correct path to your auth module
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -15,9 +16,9 @@ const Login: React.FC = () => {
 
     try {
       const response = await login(username, password);
-      localStorage.setItem('token', response.data.token); 
+      localStorage.setItem('token', response.data.token); // Save the token in localStorage
       console.log('User logged in', response.data);
-      navigate('/home'); 
+      navigate('/'); // Redirect to home page after successful login
     } catch (error: any) {
       console.error('Error logging in', error);
       if (error.response && error.response.status === 401) {
